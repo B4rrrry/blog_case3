@@ -5,6 +5,7 @@ const Comments = sequelize.define(
   "comments",
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    text: {type: DataTypes.STRING, allowNull: false}
     //users_id
     //posts_id
   }
@@ -86,5 +87,15 @@ TagsPosts.belongsTo(Posts);
 Users.hasOne(SubUsers);
 SubUsers.belongsTo(Users);
 
-SubUsers.belongsToMany(Users, { through: Subscription, as:"sub_users_id" });
-Users.belongsToMany(SubUsers, { through: Subscription, as:"users_id" });
+SubUsers.belongsToMany(Users, { through: Subscription, as: "sub_users_id" });
+Users.belongsToMany(SubUsers, { through: Subscription, as: "users_id" });
+
+module.exports = {
+  Comments,
+  Users,
+  Posts,
+  SubUsers,
+  Subscription,
+  TagsPosts,
+  Tags
+}
