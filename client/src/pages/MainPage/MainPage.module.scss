@@ -1,0 +1,17 @@
+.post {
+  &-title {
+    font-size: 34px;
+    margin-bottom: 50px;
+  }
+  &__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  &__text {
+    margin-right: 10px;
+  }
+  &-item {
+    margin-bottom: 30px;
+  }
+}

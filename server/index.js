@@ -6,11 +6,13 @@ const router = require('./routes/index');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const errorMiddleware = require('./middleware/ErrorMiddleware');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(fileUpload());
+app.use(express.static(path.resolve(__dirname,'public')));
 app.use('/api', router);
 app.use(errorMiddleware);
 

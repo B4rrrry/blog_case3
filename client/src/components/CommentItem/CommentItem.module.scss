@@ -1,0 +1,13 @@
+.comment {
+  min-width: 30%;
+  max-width: 50%;
+  &-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  &__name {
+    font-weight: bold;
+    margin-right: auto;
+  }
+}

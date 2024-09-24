@@ -44,13 +44,15 @@ class UsersConroller {
 
 
     const user = await Users.findOne({ where: { login } });
-
+    if (!user) {
+      return next(ApiError.badRequest("Неверный логин"));
+    }
     const comparePassword = bcrypt.compareSync(password, user.password);
 
 
 
     if (!comparePassword) {
-      return next(ApiError.badRequest("Неправильный логин или пароль"));
+      return next(ApiError.badRequest("Неправильный пароль"));
     }
 
     const token = generateJwt(user.login, user.id);

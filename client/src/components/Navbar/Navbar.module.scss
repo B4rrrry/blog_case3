@@ -1,0 +1,33 @@
+.navbar {
+  height: 80px;
+  background-color: #218ac7;
+  padding: 20px;
+  display: flex;
+  margin-bottom: 60px;
+}
+
+.profileLink {
+  margin-right: 15px;
+  font-size: 26px;
+  color:#fff;
+  text-decoration: none;
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.profile {
+  margin-left: auto;
+}
+
+.exit {
+  cursor: pointer;
+  color:#fff;
+  padding: 0;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  font-size: 26px;
+  background-color: transparent;
+  border: 0;
+}
