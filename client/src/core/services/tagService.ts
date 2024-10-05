@@ -10,7 +10,6 @@ class TagService {
 
   async getAll() {
     const { data } = await $host.get("/tags/");
-    console.log("tags:", data);
 
     return data;
   }

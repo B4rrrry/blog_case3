@@ -59,7 +59,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
           type="text"
           name="fName"
           id="fName"
-          value={registerForm.password}
+          value={registerForm.fName}
           placeholder="Фамилия"
           className={cn(cls["register__input"])}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateForm(e)}
@@ -68,7 +68,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
           type="text"
           name="sName"
           id="sName"
-          value={registerForm.password}
+          value={registerForm.sName}
           placeholder="Имя"
           className={cn(cls["register__input"])}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateForm(e)}
@@ -77,7 +77,7 @@ const RegisterPage: FC<RegisterPageProps> = () => {
           type="text"
           name="lName"
           id="lName"
-          value={registerForm.password}
+          value={registerForm.lName}
           placeholder="Отчество"
           className={cn(cls["register__input"])}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateForm(e)}

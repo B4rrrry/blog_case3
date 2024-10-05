@@ -14,4 +14,37 @@
   &-item {
     margin-bottom: 30px;
   }
+  &__clear {
+    &-tags {
+      margin-left: 20px;
+      width: 150px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgb(5, 56, 133);
+      color: #fff;
+      border: none;
+      margin-right: 15px;
+      border-radius: 10px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  }
+  &__create {
+    &-btn {
+      margin-left: auto;
+      width: 150px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgb(5, 56, 133);
+      color: #fff;
+      border: none;
+      margin-right: 15px;
+      border-radius: 10px;
+      text-decoration: none;
+    }
+  }
 }

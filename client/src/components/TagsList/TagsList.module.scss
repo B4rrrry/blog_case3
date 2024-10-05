@@ -7,10 +7,18 @@
     padding: 0;
     &-item {
       border-radius: 10px;
+      cursor: pointer;
       background-color: grey;
       padding: 10px;
       height: 20px;
       color: #fff;
+      margin-right: 10px;
+      &:last-child {
+        margin-right: 0;
+      }
+      &--active {
+        background-color: lightgreen;
+      }
     }
   }
 }

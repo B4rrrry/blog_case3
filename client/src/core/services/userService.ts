@@ -34,20 +34,17 @@ class UserService {
     const { data } = await $authHost.get("/users/auth");
     localStorage.setItem("token", data);
     const decode = jwtDecode<ReturnLoginData>(data);
-    console.log("data auth", data);
     return decode;
   }
 
   async getUser(id: string) {
     const { data } = await $host.get(`/users/${id}`);
-    console.log("data userOne:", data);
 
     return data;
   }
 
   async getUsers() {
     const { data } = await $host.get("/users");
-    console.log("All users", data);
     return data;
   }
 }

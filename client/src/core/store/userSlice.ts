@@ -31,13 +31,12 @@ export const loginUser = createAsyncThunk<
   const { login, password } = req;
   try {
     const data = await userService.login(login, password);
-    console.log(data, ":loginData");
 
     return data;
   } catch (e) {
     if (e instanceof AxiosError) {
       if (e.response) {
-        return rejectWithValue(e.response.data);
+        return rejectWithValue(e.response.data.message);
       }
       return rejectWithValue(e.message);
     } else {
@@ -60,18 +59,15 @@ const userSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.id = action.payload.id;
-      console.log(action.payload.login, "login1");
       state.login = action.payload.login;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       if (action.payload) {
-        console.log(action, "eror");
         state.errorLogin = action.payload;
       }
     });
     builder.addCase(checkAuth.fulfilled, (state, action) => {
       state.id = action.payload.id;
-      console.log(action.payload.login, "loginAuth");
       state.login = action.payload.login;
     });
   },

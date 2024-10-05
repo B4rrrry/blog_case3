@@ -1,5 +1,5 @@
 const ApiError = require('../error/ApiError');
-const { Comments } = require('../models/models');
+const { Comments, Users } = require('../models/models');
 
 class PostsController {
 
@@ -22,11 +22,11 @@ class PostsController {
   async getAll(req,res,next) {
     const {id} = req.body;
 
-    if(!id) {
+   /*  if(!id) {
       return next(ApiError.badRequest("Не заполнены обязательные поля"));
-    }
+    } */
 
-    const comments = await Comments.findAll({where:{id}});
+    const comments = await Comments.findAll();
 
     return res.json(comments);
   }

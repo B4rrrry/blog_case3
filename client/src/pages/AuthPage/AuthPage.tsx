@@ -31,7 +31,7 @@ const AuthPage: FC<AuthPageProps> = () => {
     e.preventDefault();
     dispatch(loginUser({ login: authForm.login, password: authForm.password }));
   };
-  console.log(selector.login,'login')
+  console.log(selector.errorLogin, "login");
   return (
     <div>
       {selector.login && <Navigate to="/" />}
@@ -58,6 +58,9 @@ const AuthPage: FC<AuthPageProps> = () => {
           className={cn(cls["auth__input"])}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateForm(e)}
         />
+        {selector.errorLogin && (
+          <p className={cn(cls["auth__error"])}>{selector.errorLogin}</p>
+        )}
         <input type="submit" value="Войти" className={cn(cls["auth__sub"])} />
       </form>
     </div>

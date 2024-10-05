@@ -1,17 +1,23 @@
 import { FC } from "react";
 import cls from "./CommentItem.module.scss";
 import cn from "classnames";
+import { reverseDate } from "../../helpers/reverseDate";
 
-interface CommentItemProps {}
+interface CommentItemProps {
+  name: string;
+  date: string;
+  text: string;
+}
 
-const CommentItem: FC<CommentItemProps> = () => {
+const CommentItem: FC<CommentItemProps> = ({name, date,text},props) => {
+  const dateTransform = reverseDate(date.slice(0, 10).replaceAll("-", "."));
   return (
-    <div className={cn(cls["comment"])}>
+    <div className={cn(cls["comment"])} {...props}>
       <div className={cn(cls["comment-header"])}>
-        <p className={cn(cls["comment__name"])}>Имя</p>
-        <p className={cn(cls["comment__date"])}>11.11.1111</p>
+        <p className={cn(cls["comment__name"])}>{name}</p>
+        <p className={cn(cls["comment__date"])}>{dateTransform}</p>
       </div>
-      <p className={cn(cls["comment__text"])}>Комментарий</p>
+      <p className={cn(cls["comment__text"])}>{text}</p>
     </div>
   );
 };
