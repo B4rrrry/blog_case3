@@ -16,11 +16,24 @@ class SubService {
   }
 
   async deleteSubscription(userId: string) {
-    const { data } = await $host.put("/subscriptions/", userId);
+    const { data } = await $host.put("/subscriptions/",{userId});
     console.log("delete subscriptions:", data);
 
     return data;
   }
+
+  async getSubUserId(userId: string) {
+    const {data} = await $host.get(`/subs/${userId}`)
+
+    return data;
+  }
+
+  async getSubscriptionsById(subUserId: string) {
+    const {data} = await $host.get(`/subscriptions/${subUserId}`)
+
+    return data;
+  }
+
 }
 
 export default new SubService();

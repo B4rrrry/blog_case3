@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import cls from "./PostPage.module.scss";
 import cn from "classnames";
 import CommentItem from "../../components/CommentItem/CommentItem";
@@ -7,8 +7,12 @@ import TagsList from "../../components/TagsList/TagsList";
 import CommentsForm from "../../components/CommentsForm/CommentsForm";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../core/store/store";
-import { getPostById } from "../../core/store/postsSlice";
 import postService from "../../core/services/postService";
+import SubscriptionButton from "../../components/SubscriptionButton/SubscriptionButton";
+import UnSubscriptionButton from "../../components/UnSubscriptionButton/UnSubscriptionButton";
+import SubscriptionBar from "../../components/SubscriptionBar/SubscriptionBar";
+import { getPostById } from "../../core/store/reducers/postReducers";
+import { getSubscriptionById } from "../../core/store/reducers/userReducers";
 
 interface PostPageProps {}
 
@@ -16,15 +20,26 @@ const PostPage: FC<PostPageProps> = () => {
   const params = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const { post } = useSelector((s: RootState) => s.postsSlice);
-  const { id } = useSelector((s: RootState) => s.userSlice);
+  const { id, subUserId, subscriptions } = useSelector(
+    (s: RootState) => s.userSlice
+  );
   const navigate = useNavigate();
   const tags = post ? post?.tags_posts.map((tag) => tag.tag) : [];
+  const [commentsLoad, setCommentsLoad] = useState(false);
   useEffect(() => {
-    redirect("/");
     if (params.id) {
       dispatch(getPostById(params.id));
+      if (commentsLoad) {
+        setCommentsLoad(false);
+      }
     }
-  }, []);
+  }, [commentsLoad]);
+  useEffect(() => {
+    if (subUserId) {
+      console.log("dkfl11111111dfk");
+      dispatch(getSubscriptionById(subUserId));
+    }
+  }, [subUserId]);
   const deletePostById = async (id: string) => {
     try {
       const post = await postService.deletePost(id);
@@ -77,15 +92,8 @@ const PostPage: FC<PostPageProps> = () => {
       <p className={cn(cls["post__description"])}>{post?.description}</p>
       <div className={cn(cls["post__footer"])}>
         <TagsList tags={tags} onClick={(e) => console.log()} />
-        {post?.userId == id ? (
-          ""
-        ) : (
-          <>
-            {id && (
-              <button className={cn(cls["post__sub"])}>Подписаться</button>
-            )}
-          </>
-        )}
+        {post?.userId == id && ""}
+        {post?.userId != id && <SubscriptionBar />}
       </div>
       <h2 className={cn(cls["post-comments__title"])}>Комментарии</h2>
       {post?.comments.length == 0 ? (
@@ -101,12 +109,9 @@ const PostPage: FC<PostPageProps> = () => {
               />
             </li>
           ))}
-          {/* <li className={cn(cls["post-comments__item"])}>
-            <CommentItem />
-          </li> */}
         </ul>
       )}
-      {id && <CommentsForm />}
+      {id && <CommentsForm setCommentsLoad={setCommentsLoad} />}
     </div>
   );
 };

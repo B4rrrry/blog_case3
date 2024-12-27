@@ -5,6 +5,7 @@ const router = new Router();
 
 router.post('/', subsController.createSubscription);
 router.put('/', subsController.deleteSubscription);
+router.get('/:id', subsController.getSubscriptionsById);
 
 
 

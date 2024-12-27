@@ -1,5 +1,5 @@
 const ApiError = require('../error/ApiError');
-const { Tags } = require('../models/models');
+const { Tags,TagsPosts } = require('../models/models');
 
 class TagController {
 

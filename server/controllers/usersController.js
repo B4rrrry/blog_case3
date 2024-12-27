@@ -2,6 +2,7 @@ const { Users } = require('../models/models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const ApiError = require('../error/ApiError');
+const subsController = require('./subsController');
 
 const generateJwt = (login, id) => {
   return jwt.sign({ login, id }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });

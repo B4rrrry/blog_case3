@@ -18,8 +18,9 @@ class UserService {
       sName,
       lName,
     });
-
-    return data;
+    localStorage.setItem("token", data);
+    const decode = jwtDecode<ReturnLoginData>(data);
+    return decode;
   }
 
   async login(login: string, password: string) {

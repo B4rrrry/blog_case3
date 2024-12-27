@@ -1,19 +1,23 @@
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, SetStateAction, useState } from "react";
 import cls from "./CommentsForm.module.scss";
 import cn from "classnames";
 import commentService from "../../core/services/commentService";
 import { useSelector } from "react-redux";
 import { RootState } from "../../core/store/store";
 
-interface CommentsFormProps {}
+interface CommentsFormProps {
+  setCommentsLoad: React.Dispatch<SetStateAction<boolean>>;
+}
 
-const CommentsForm: FC<CommentsFormProps> = () => {
+const CommentsForm: FC<CommentsFormProps> = ({ setCommentsLoad }) => {
   const [text, setText] = useState("");
   const { post } = useSelector((s: RootState) => s.postsSlice);
   const { id } = useSelector((s: RootState) => s.userSlice);
-  const sendComment = async (e : FormEvent) => {
+  const sendComment = async (e: FormEvent) => {
     e.preventDefault();
-    const newComments = await commentService.create(id!,post!.id,text);
+    const newComments = await commentService.create(id!, post!.id, text);
+    setText("");
+    setCommentsLoad(true);
     return newComments;
   };
   return (

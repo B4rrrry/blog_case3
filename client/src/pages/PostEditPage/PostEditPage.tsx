@@ -3,10 +3,10 @@ import cls from "./PostEditPage.module.scss";
 import cn from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../core/store/store";
-import { createPost, getPostById, getTags, updatePost } from "../../core/store/postsSlice";
 import { useParams } from "react-router-dom";
 import TagsList from "../../components/TagsList/TagsList";
 import { TagProps } from "../../core/store/types/postsSliceTypes";
+import { getPostById, updatePost } from "../../core/store/reducers/postReducers";
 
 interface PostEditPageProps {}
 

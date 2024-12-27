@@ -3,9 +3,11 @@ import cls from "./AuthPage.module.scss";
 import cn from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../core/store/store";
-import { loginUser } from "../../core/store/userSlice";
+import { loginUser } from "../../core/store/reducers/userReducers";
 import { Navigate } from "react-router-dom";
-
+import { Viewer } from "@react-pdf-viewer/core";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import { Worker } from "@react-pdf-viewer/core";
 interface AuthPageProps {}
 
 interface AuthForm {

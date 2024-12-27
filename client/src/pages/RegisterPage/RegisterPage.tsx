@@ -1,6 +1,10 @@
 import { FC, FormEvent, useState } from "react";
 import cls from "./RegisterPage.module.scss";
 import cn from "classnames";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../core/store/store";
+import { Navigate } from "react-router-dom";
+import { registerUser } from "../../core/store/reducers/userReducers";
 
 interface RegisterPageProps {}
 
@@ -18,9 +22,10 @@ const RegisterPage: FC<RegisterPageProps> = () => {
     password: "",
     fName: "",
     sName: "",
-    lName: ""
+    lName: "",
   });
-
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector((s: RootState) => s.userSlice);
   const onUpdateForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     return setRegisterForm((prev) => {
       const newForm = { ...prev, [e.target.name]: e.target.value };
@@ -28,15 +33,26 @@ const RegisterPage: FC<RegisterPageProps> = () => {
     });
   };
 
-  const onSendFormHandler = (e : FormEvent) => {
+  const onSendFormHandler = (e: FormEvent) => {
     e.preventDefault();
-    console.log(registerForm)
-  }
+    const newUser = {
+      login: registerForm.login,
+      password: registerForm.password,
+      fName: registerForm.fName,
+      sName: registerForm.sName,
+      lName: registerForm.lName,
+    };
+    dispatch(registerUser(newUser));
+  };
 
   return (
     <div>
+      {user.login && <Navigate to="/" />}
       <h1 className={cn(cls["register__title"])}>Регистрация</h1>
-      <form className={cn(cls["register__form"])} onSubmit={(e) => onSendFormHandler(e)}>
+      <form
+        className={cn(cls["register__form"])}
+        onSubmit={(e) => onSendFormHandler(e)}
+      >
         <input
           type="text"
           name="login"
@@ -82,7 +98,11 @@ const RegisterPage: FC<RegisterPageProps> = () => {
           className={cn(cls["register__input"])}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateForm(e)}
         />
-        <input type="submit" value="Войти" className={cn(cls["register__sub"])} />
+        <input
+          type="submit"
+          value="Войти"
+          className={cn(cls["register__sub"])}
+        />
       </form>
     </div>
   );

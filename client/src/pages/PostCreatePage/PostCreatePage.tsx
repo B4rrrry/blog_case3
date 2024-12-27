@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import cls from "./PostCreatePage.module.scss";
 import cn from "classnames";
 import TagsList from "../../components/TagsList/TagsList";
-import { createPost, getTags } from "../../core/store/postsSlice";
+import { createPost, getTags } from "../../core/store/reducers/postReducers";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../core/store/store";
 import {

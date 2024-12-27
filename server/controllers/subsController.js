@@ -19,6 +19,30 @@ class SubsController {
     }
   }
 
+  async getSubUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        return next(ApiError.badRequest("Не заполнен id"));
+      }
+      const subUser = await SubUsers.findOne({ where: { userId: id } });
+
+      res.json(subUser);
+    } catch (e) {
+      return next(ApiError.badRequest(e.message));
+    }
+  }
+
+  async getSubscriptionsById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const subs = await Subscription.findAll({ where: { subUserId: id } });
+      return res.json(subs);
+    } catch (e) {
+
+    }
+  }
+
   async createSubscription(req, res, next) {
     try {
       const { subUserId, userId } = req.body;
@@ -53,7 +77,7 @@ class SubsController {
         return next(ApiError.badRequest("Пользователь не найден"));
       }
 
-      return next(ApiError.badRequest("Подписка удалена"));
+      return res.json({ message: "Подписка удалена" })
     } catch (e) {
       return next(ApiError.badRequest(e.message));
     }

@@ -55,7 +55,11 @@ class PostsController {
     const { id } = req.params;
     const includeQuery =
       [{ model: TagsPosts, include: [{ model: Tags }] },
-      { model: Comments, include: [{model:Users}] }]
+      { model: Comments, include: [{ model: Users }] }]
+    if(!Number.isInteger(parseInt(id))) {
+      return next(ApiError.badRequest("Не цифра"));
+    }
+
     if (!id) {
       return next(ApiError.badRequest("Не заполнен id"));
     }
@@ -71,8 +75,9 @@ class PostsController {
 
       if (!id) { return next(ApiError.badRequest("Не заполнен id")); }
 
+      const tagsDeleted = await TagsPosts.destroy({ where: { postId: id } });
+      const commentsDeleted = await Comments.destroy({ where: { postId: id } });
       const post = await Posts.destroy({ where: { id } });
-
       if (!post) {
         return next(ApiError.badRequest("Пост не был найден"));
       }

@@ -18,7 +18,7 @@ const Navbar: FC<NavbarProps> = () => {
         Блог
       </Link>
       <Link to="/profile" className={cn(cls.profileLink, cls.profile)}>
-        Профиль
+        {selector.login}
       </Link>
       {!selector.login && (
         <>

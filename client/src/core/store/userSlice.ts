@@ -1,49 +1,29 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import userService from "../services/userService";
-import { AxiosError } from "axios";
-import { LoginData, ReturnLoginData } from "./types/useSliceTypes";
+import { createSlice } from "@reduxjs/toolkit";
+import { Subscriptions } from "./types/useSliceTypes";
+import {
+  checkAuth,
+  createSubscription,
+  deleteSubscription,
+  getSubscriptionById,
+  loginUser,
+  registerUser,
+} from "./reducers/userReducers";
 
 interface UserState {
   login: string | null;
   id: string | null;
   errorLogin: string | null;
+  subUserId: string | null;
+  subscriptions: Subscriptions[] | [];
 }
 
 const initialState: UserState = {
   login: null,
   id: null,
   errorLogin: null,
+  subUserId: null,
+  subscriptions: [],
 };
-
-export const checkAuth = createAsyncThunk("/users/auth", async () => {
-  const data = await userService.auth();
-
-  return data;
-});
-
-export const loginUser = createAsyncThunk<
-  ReturnLoginData,
-  LoginData,
-  {
-    rejectValue: string;
-  }
->("/users/login", async (req, { rejectWithValue }) => {
-  const { login, password } = req;
-  try {
-    const data = await userService.login(login, password);
-
-    return data;
-  } catch (e) {
-    if (e instanceof AxiosError) {
-      if (e.response) {
-        return rejectWithValue(e.response.data.message);
-      }
-      return rejectWithValue(e.message);
-    } else {
-      return rejectWithValue("Unexpected Error");
-    }
-  }
-});
 
 const userSlice = createSlice({
   name: "users",
@@ -53,6 +33,8 @@ const userSlice = createSlice({
       state.errorLogin = null;
       state.id = null;
       state.login = null;
+      state.subUserId = null;
+      state.subscriptions = [];
       localStorage.removeItem("token");
     },
   },
@@ -60,6 +42,7 @@ const userSlice = createSlice({
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.id = action.payload.id;
       state.login = action.payload.login;
+      state.subUserId = action.payload.subUserId;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       if (action.payload) {
@@ -69,6 +52,29 @@ const userSlice = createSlice({
     builder.addCase(checkAuth.fulfilled, (state, action) => {
       state.id = action.payload.id;
       state.login = action.payload.login;
+      state.subUserId = action.payload.subUserId;
+    });
+    builder.addCase(registerUser.fulfilled, (state, action) => {
+      state.id = action.payload.id;
+      state.subUserId = action.payload.subUserId;
+      state.login = action.payload.login;
+    });
+    builder.addCase(createSubscription.fulfilled, (state, action) => {
+      console.log(action, "subs action");
+      state.subscriptions = [...state.subscriptions, action.payload];
+    });
+    builder.addCase(getSubscriptionById.fulfilled, (state, action) => {
+      state.subscriptions = action.payload;
+      console.log("dfkldfldkfldklfkdkflk");
+    });
+    builder.addCase(deleteSubscription.fulfilled, (state, action) => {
+      console.log("deleted");
+      if (action.payload && state.subscriptions) {
+        const newSubs = state.subscriptions.filter(
+          (item) => item.userId != action.payload.userId
+        );
+        state.subscriptions = newSubs;
+      }
     });
   },
 });

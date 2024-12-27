@@ -1,18 +1,19 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import cls from "./MainPage.module.scss";
 import cn from "classnames";
 import { Link } from "react-router-dom";
 import PostCard from "../../components/PostCard/PostCard";
 import TagsList from "../../components/TagsList/TagsList";
-import userService from "../../core/services/userService";
-import postService from "../../core/services/postService";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../core/store/store";
-import postsSlice, { getTags } from "../../core/store/postsSlice";
-import { getPosts } from "./../../core/store/postsSlice";
-import { PostProps } from "../../core/store/types/postsSliceTypes";
+import { getTags, getPosts } from "../../core/store/reducers/postReducers";
 
 interface MainPageProps {}
+
+enum PostTypesEnum {
+  ALL = "all",
+  SUBS = "subs",
+}
 
 const MainPage: FC<MainPageProps> = () => {
   const [sort, setSort] = useState<{ id: string }>({ id: "" });
@@ -21,8 +22,8 @@ const MainPage: FC<MainPageProps> = () => {
     name: "",
   });
   const { posts, tags } = useSelector((s: RootState) => s.postsSlice);
-  const { login } = useSelector((s: RootState) => s.userSlice);
-
+  const { login, subscriptions } = useSelector((s: RootState) => s.userSlice);
+  const [typePosts, setTypePosts] = useState<PostTypesEnum>(PostTypesEnum.ALL);
   const updateSort = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     const targetBtn = e.target as HTMLElement;
     const id = targetBtn.dataset.id;
@@ -39,8 +40,6 @@ const MainPage: FC<MainPageProps> = () => {
     const sorts = posts.filter((post) =>
       post.tags_posts.some((tag) => tag.tagId == sort.id)
     );
-
-    console.log(sorts, "|||");
     return sorts;
   }, [posts, sort]);
   useEffect(() => {
@@ -60,7 +59,7 @@ const MainPage: FC<MainPageProps> = () => {
           onClick={(e) => updateSort(e)}
           selectedValue={selectedSort.name}
         />
-        {sort.id != '' ? (
+        {sort.id != "" ? (
           <button
             className={cn(cls["post__clear-tags"])}
             onClick={() => {
@@ -70,19 +69,66 @@ const MainPage: FC<MainPageProps> = () => {
           >
             Сбросить
           </button>
-        ) : ""}
+        ) : (
+          ""
+        )}
         {login && (
           <Link className={cn(cls["post__create-btn"])} to="/post/create">
             Создать пост
           </Link>
         )}
       </div>
-      {sortPosts &&
-        sortPosts.map((post) => {
-          return (
-            <PostCard key={post.id} className={cls["post-item"]} post={post} />
-          );
-        })}
+      <ul className={cn(cls["post-types__list"])}>
+        <li className={cn(cls["post-types__item"])}>
+          <button
+            className={cn(cls["post-types__btn"], {
+              [cls["post-types__btn--active"]]: typePosts == PostTypesEnum.ALL ? true : false,
+            })}
+            onClick={() => setTypePosts(PostTypesEnum.ALL)}
+          >
+            Все
+          </button>
+        </li>
+        <li className={cn(cls["post-types__item"])}>
+          <button
+            className={cn(cls["post-types__btn"], {
+              [cls["post-types__btn--active"]]: typePosts == PostTypesEnum.SUBS ? true : false,
+            })}
+            onClick={() => setTypePosts(PostTypesEnum.SUBS)}
+          >
+            Подписки
+          </button>
+        </li>
+      </ul>
+      {sortPosts && sortPosts.length == 0 ? (
+        <p>Постов нет:(</p>
+      ) : (
+        <>
+          {typePosts == PostTypesEnum.ALL
+            ? sortPosts.map((post) => {
+                return (
+                  <PostCard
+                    key={post.id}
+                    className={cls["post-item"]}
+                    post={post}
+                  />
+                );
+              })
+            : sortPosts
+                .filter((post) =>
+                  subscriptions.some((sub) => sub.userId === post.userId)
+                )
+                .map((post) => {
+                  return (
+                    <PostCard
+                      key={post.id}
+                      className={cls["post-item"]}
+                      post={post}
+                    />
+                  );
+                })}
+        </>
+      )}
     </div>
   );
 };
